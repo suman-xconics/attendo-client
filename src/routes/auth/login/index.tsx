@@ -1,10 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { useAuth } from '@/provider/auth';
 import { Logo } from '@/components/shared/logo';
-import { Suspense, useEffect } from 'react';
-import { AUTH_PAGE_STATES, useAuthPageStore } from '@/store/auth';
-import Loader from '@/components/shared/loader';
-import { useRouter } from '@tanstack/react-router';
 import { LoginForm } from '@/components/auth/login-form';
 
 export const Route = createFileRoute('/auth/login/')({

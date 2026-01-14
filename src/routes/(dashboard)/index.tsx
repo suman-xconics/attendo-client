@@ -2,7 +2,7 @@ import PageContentContainer from '@/components/layout/container/page-content'
 import { useAuth } from '@/provider/auth'
 import { createFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute('/(dashboard)/')({
   component: () => {
     const {user, session} = useAuth()
     return (
