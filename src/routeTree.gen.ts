@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ReportRouteImport } from './routes/report'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthLoginIndexRouteImport } from './routes/auth/login/index'
 import { Route as EmployeeActionCreateRouteImport } from './routes/employee/action/create'
 
 const ReportRoute = ReportRouteImport.update({
@@ -23,6 +24,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthLoginIndexRoute = AuthLoginIndexRouteImport.update({
+  id: '/auth/login/',
+  path: '/auth/login/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EmployeeActionCreateRoute = EmployeeActionCreateRouteImport.update({
   id: '/employee/action/create',
   path: '/employee/action/create',
@@ -33,30 +39,34 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/report': typeof ReportRoute
   '/employee/action/create': typeof EmployeeActionCreateRoute
+  '/auth/login': typeof AuthLoginIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/report': typeof ReportRoute
   '/employee/action/create': typeof EmployeeActionCreateRoute
+  '/auth/login': typeof AuthLoginIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/report': typeof ReportRoute
   '/employee/action/create': typeof EmployeeActionCreateRoute
+  '/auth/login/': typeof AuthLoginIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/report' | '/employee/action/create'
+  fullPaths: '/' | '/report' | '/employee/action/create' | '/auth/login'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/report' | '/employee/action/create'
-  id: '__root__' | '/' | '/report' | '/employee/action/create'
+  to: '/' | '/report' | '/employee/action/create' | '/auth/login'
+  id: '__root__' | '/' | '/report' | '/employee/action/create' | '/auth/login/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ReportRoute: typeof ReportRoute
   EmployeeActionCreateRoute: typeof EmployeeActionCreateRoute
+  AuthLoginIndexRoute: typeof AuthLoginIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -75,6 +85,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/login/': {
+      id: '/auth/login/'
+      path: '/auth/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/employee/action/create': {
       id: '/employee/action/create'
       path: '/employee/action/create'
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ReportRoute: ReportRoute,
   EmployeeActionCreateRoute: EmployeeActionCreateRoute,
+  AuthLoginIndexRoute: AuthLoginIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
