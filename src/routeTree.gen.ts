@@ -12,8 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as dashboardRouteRouteImport } from './routes/(dashboard)/route'
 import { Route as dashboardIndexRouteImport } from './routes/(dashboard)/index'
 import { Route as AuthLoginIndexRouteImport } from './routes/auth/login/index'
+import { Route as dashboardEmployeeActionIdRouteImport } from './routes/(dashboard)/employee/action/$id'
 import { Route as dashboardEmployeeOverviewAllIndexRouteImport } from './routes/(dashboard)/employee/overview/all/index'
-import { Route as dashboardEmployeeActionCreateIndexRouteImport } from './routes/(dashboard)/employee/action/create/index'
 
 const dashboardRouteRoute = dashboardRouteRouteImport.update({
   id: '/(dashboard)',
@@ -29,29 +29,29 @@ const AuthLoginIndexRoute = AuthLoginIndexRouteImport.update({
   path: '/auth/login/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const dashboardEmployeeActionIdRoute =
+  dashboardEmployeeActionIdRouteImport.update({
+    id: '/employee/action/$id',
+    path: '/employee/action/$id',
+    getParentRoute: () => dashboardRouteRoute,
+  } as any)
 const dashboardEmployeeOverviewAllIndexRoute =
   dashboardEmployeeOverviewAllIndexRouteImport.update({
     id: '/employee/overview/all/',
     path: '/employee/overview/all/',
     getParentRoute: () => dashboardRouteRoute,
   } as any)
-const dashboardEmployeeActionCreateIndexRoute =
-  dashboardEmployeeActionCreateIndexRouteImport.update({
-    id: '/employee/action/create/',
-    path: '/employee/action/create/',
-    getParentRoute: () => dashboardRouteRoute,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof dashboardIndexRoute
   '/auth/login': typeof AuthLoginIndexRoute
-  '/employee/action/create': typeof dashboardEmployeeActionCreateIndexRoute
+  '/employee/action/$id': typeof dashboardEmployeeActionIdRoute
   '/employee/overview/all': typeof dashboardEmployeeOverviewAllIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof dashboardIndexRoute
   '/auth/login': typeof AuthLoginIndexRoute
-  '/employee/action/create': typeof dashboardEmployeeActionCreateIndexRoute
+  '/employee/action/$id': typeof dashboardEmployeeActionIdRoute
   '/employee/overview/all': typeof dashboardEmployeeOverviewAllIndexRoute
 }
 export interface FileRoutesById {
@@ -59,7 +59,7 @@ export interface FileRoutesById {
   '/(dashboard)': typeof dashboardRouteRouteWithChildren
   '/(dashboard)/': typeof dashboardIndexRoute
   '/auth/login/': typeof AuthLoginIndexRoute
-  '/(dashboard)/employee/action/create/': typeof dashboardEmployeeActionCreateIndexRoute
+  '/(dashboard)/employee/action/$id': typeof dashboardEmployeeActionIdRoute
   '/(dashboard)/employee/overview/all/': typeof dashboardEmployeeOverviewAllIndexRoute
 }
 export interface FileRouteTypes {
@@ -67,16 +67,16 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth/login'
-    | '/employee/action/create'
+    | '/employee/action/$id'
     | '/employee/overview/all'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth/login' | '/employee/action/create' | '/employee/overview/all'
+  to: '/' | '/auth/login' | '/employee/action/$id' | '/employee/overview/all'
   id:
     | '__root__'
     | '/(dashboard)'
     | '/(dashboard)/'
     | '/auth/login/'
-    | '/(dashboard)/employee/action/create/'
+    | '/(dashboard)/employee/action/$id'
     | '/(dashboard)/employee/overview/all/'
   fileRoutesById: FileRoutesById
 }
@@ -108,6 +108,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(dashboard)/employee/action/$id': {
+      id: '/(dashboard)/employee/action/$id'
+      path: '/employee/action/$id'
+      fullPath: '/employee/action/$id'
+      preLoaderRoute: typeof dashboardEmployeeActionIdRouteImport
+      parentRoute: typeof dashboardRouteRoute
+    }
     '/(dashboard)/employee/overview/all/': {
       id: '/(dashboard)/employee/overview/all/'
       path: '/employee/overview/all'
@@ -115,26 +122,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof dashboardEmployeeOverviewAllIndexRouteImport
       parentRoute: typeof dashboardRouteRoute
     }
-    '/(dashboard)/employee/action/create/': {
-      id: '/(dashboard)/employee/action/create/'
-      path: '/employee/action/create'
-      fullPath: '/employee/action/create'
-      preLoaderRoute: typeof dashboardEmployeeActionCreateIndexRouteImport
-      parentRoute: typeof dashboardRouteRoute
-    }
   }
 }
 
 interface dashboardRouteRouteChildren {
   dashboardIndexRoute: typeof dashboardIndexRoute
-  dashboardEmployeeActionCreateIndexRoute: typeof dashboardEmployeeActionCreateIndexRoute
+  dashboardEmployeeActionIdRoute: typeof dashboardEmployeeActionIdRoute
   dashboardEmployeeOverviewAllIndexRoute: typeof dashboardEmployeeOverviewAllIndexRoute
 }
 
 const dashboardRouteRouteChildren: dashboardRouteRouteChildren = {
   dashboardIndexRoute: dashboardIndexRoute,
-  dashboardEmployeeActionCreateIndexRoute:
-    dashboardEmployeeActionCreateIndexRoute,
+  dashboardEmployeeActionIdRoute: dashboardEmployeeActionIdRoute,
   dashboardEmployeeOverviewAllIndexRoute:
     dashboardEmployeeOverviewAllIndexRoute,
 }

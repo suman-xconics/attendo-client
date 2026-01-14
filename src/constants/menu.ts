@@ -38,7 +38,7 @@ export const myPanelSidebarItems: SidebarItem[] = [
         id: "create",
         groupLabel: "action",
         label: "Create",
-        route: "/employee/action/create",
+        route: "/employee/action/new",
       },
       {
         id: "create_hr",
