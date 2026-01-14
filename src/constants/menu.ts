@@ -28,6 +28,12 @@ export const myPanelSidebarItems: SidebarItem[] = [
     icon: "IconUsers",
     hasSubItems: true,
     subItems: [
+       {
+        id: "all",
+        groupLabel: "Records",
+        label: "All Employees",
+        route: "/employee/overview/all",
+      },
       {
         id: "create",
         groupLabel: "action",
