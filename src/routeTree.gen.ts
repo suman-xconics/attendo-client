@@ -9,16 +9,9 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ReportRouteImport } from './routes/report'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthLoginIndexRouteImport } from './routes/auth/login/index'
-import { Route as EmployeeActionCreateRouteImport } from './routes/employee/action/create'
 
-const ReportRoute = ReportRouteImport.update({
-  id: '/report',
-  path: '/report',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -29,55 +22,35 @@ const AuthLoginIndexRoute = AuthLoginIndexRouteImport.update({
   path: '/auth/login/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EmployeeActionCreateRoute = EmployeeActionCreateRouteImport.update({
-  id: '/employee/action/create',
-  path: '/employee/action/create',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/report': typeof ReportRoute
-  '/employee/action/create': typeof EmployeeActionCreateRoute
   '/auth/login': typeof AuthLoginIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/report': typeof ReportRoute
-  '/employee/action/create': typeof EmployeeActionCreateRoute
   '/auth/login': typeof AuthLoginIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/report': typeof ReportRoute
-  '/employee/action/create': typeof EmployeeActionCreateRoute
   '/auth/login/': typeof AuthLoginIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/report' | '/employee/action/create' | '/auth/login'
+  fullPaths: '/' | '/auth/login'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/report' | '/employee/action/create' | '/auth/login'
-  id: '__root__' | '/' | '/report' | '/employee/action/create' | '/auth/login/'
+  to: '/' | '/auth/login'
+  id: '__root__' | '/' | '/auth/login/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ReportRoute: typeof ReportRoute
-  EmployeeActionCreateRoute: typeof EmployeeActionCreateRoute
   AuthLoginIndexRoute: typeof AuthLoginIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/report': {
-      id: '/report'
-      path: '/report'
-      fullPath: '/report'
-      preLoaderRoute: typeof ReportRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -92,20 +65,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/employee/action/create': {
-      id: '/employee/action/create'
-      path: '/employee/action/create'
-      fullPath: '/employee/action/create'
-      preLoaderRoute: typeof EmployeeActionCreateRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ReportRoute: ReportRoute,
-  EmployeeActionCreateRoute: EmployeeActionCreateRoute,
   AuthLoginIndexRoute: AuthLoginIndexRoute,
 }
 export const routeTree = rootRouteImport
