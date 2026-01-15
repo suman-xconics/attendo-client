@@ -18,7 +18,7 @@ export function useCreateEmployee() {
           return data;
         },
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: queryKeys.users.all.queryKey });
+          queryClient.invalidateQueries({ queryKey: ["users"] });
         },
       }
     )
@@ -37,7 +37,7 @@ export function useCreateEmployeeHR() {
           return data;
         },
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: queryKeys.users.all.queryKey });
+          queryClient.invalidateQueries({ queryKey: ["users"] });
         },
       }
     )
@@ -62,13 +62,32 @@ export function useUpdateEmployee() {
           const { data } = await apiClient.put<User>(`/employees/${input.id}`, validated);
           return data;
         },
-        onSuccess: (variables) => {
+        onSuccess: () => {
           queryClient.invalidateQueries({
-            queryKey: queryKeys.users.details(variables.id).queryKey,
+            queryKey: ["users"],
           });
-          queryClient.invalidateQueries({ queryKey: queryKeys.users.all.queryKey });
+
         },
       }
     )
+  );
+}
+
+export function useDeleteEmployee() {
+  const queryClient = useQueryClient();
+  
+  return useMutation(
+    getMutationConfig<void, { id: string }>("optimistic", {
+      mutationFn: async (input: { id: string }) => {
+        await apiClient.delete<void>(`/employees/${input.id}`);
+      }
+      ,
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: ["users"],
+        });
+
+      },
+    })
   );
 }

@@ -1,6 +1,8 @@
 import PageContentContainer from '@/components/layout/container/page-content'
 import ContentHeader from '@/components/layout/container/page-content-header'
+import { useListEmployees } from '@/hooks/employee/query'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import EmployeeTable from './_components/data-table'
 
 export const Route = createFileRoute('/(dashboard)/employee/overview/all/')({
   component: RouteComponent,
@@ -19,6 +21,6 @@ function RouteComponent() {
             onAddClick={handleAddEmployee}
             title="All Employees"
         />
-        table goes here
+        <EmployeeTable />
     </PageContentContainer>
 }
