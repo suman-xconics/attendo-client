@@ -1,6 +1,6 @@
 "use client";
 
-import { IconDotsVertical, IconEdit, IconSettings, IconTrash } from "@tabler/icons-react";
+import { IconDotsVertical, IconEdit, IconTrash } from "@tabler/icons-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import {
@@ -9,16 +9,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { Attendence, User } from "@/types/db";
-import { useDeleteEmployee } from "@/hooks/employee/mutation";
+import type { Attendence } from "@/types/db";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "@tanstack/react-router";
-import { ConfirmDialog } from "@/components/shared/delete-text-confirmation";
 import { useDeleteAttendance } from "@/hooks/attendance/mutation";
 import { AlertModal } from "@/components/shared/alert-modal";
 
 interface CellActionProps {
-  data:Attendence;
+  data: Attendence;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
@@ -75,13 +73,8 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="center" sideOffset={5}>
-          {/* <DropdownMenuItem
-            onSelect={() => handleNavigate(`${currentPath}/control/${data.id}`)}
-          >
-            <IconSettings className="size-4 stroke-[1.5px]" /> Manage
-          </DropdownMenuItem> */}
           <DropdownMenuItem
-            onSelect={() => handleNavigate(`/employee/action/${data.id}`)}
+            onSelect={() => handleNavigate(`/attendance/action/${data.id}`)}
           >
             <IconEdit className="size-4 stroke-[1.5px]" /> Update
           </DropdownMenuItem>

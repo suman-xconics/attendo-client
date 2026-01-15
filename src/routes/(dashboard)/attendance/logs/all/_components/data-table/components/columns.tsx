@@ -21,17 +21,18 @@ export const getColumns = (
         <DataTableColumnHeader column={column} title="ID" />
       ),
       cell: ({ row }) => <CopyValueCell accessorKey="id" row={row} />,
-
+      size:140,
     },
-    // {
-    //   accessorKey: "userId",
-    //   header: ({ column }) => (
-    //     <DataTableColumnHeader column={column} title="Employee ID" />
-    //   ),
-    //   size: 150,
-    //   enableColumnFilter: false,
-    //   enableSorting: false,
-    // },
+    {
+      accessorKey: "userId",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Employee ID" />
+      ),
+      cell: ({ row }) => <CopyValueCell accessorKey="userId" row={row} />,
+      size: 140,
+      enableColumnFilter: false,
+      enableSorting: false,
+    },
     {
       accessorKey: "userName",
       header: ({ column }) => (
@@ -52,6 +53,7 @@ export const getColumns = (
         return <div className="max-w-full text-left truncate">{date
           ? date : "-"}</div>;
       },
+      size: 10,
     },
     {
       accessorKey: "manual",
@@ -67,7 +69,7 @@ export const getColumns = (
       },
       enableColumnFilter: false,
       enableSorting: false,
-
+      size:10,
     },
     {
       accessorKey: "entryTime",
@@ -146,7 +148,7 @@ export const getColumns = (
         enableSorting: false,
         enableResizing: false,
         enableHiding: false,
-        size: 50,
+        size: 10,
       },
       ...baseColumns,
     ];

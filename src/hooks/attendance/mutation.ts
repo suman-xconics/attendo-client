@@ -24,7 +24,7 @@ export function useCreateAttendanceRecord() {
   );
 }
 
-export function useUpdateAttendance() {
+export function useUpdateAttendanceRecord() {
   const queryClient = useQueryClient();
 
   return useMutation(

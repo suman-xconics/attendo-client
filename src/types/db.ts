@@ -15,12 +15,19 @@ export const UserSchema = z.object({
   macAddress: z.string().optional().nullable(),
   createdAt: z.date(),
   updatedAt: z.date(),
-})
-export const InsertUserSchema = UserSchema.omit({ id: true,
-  status: true, role: true, createdAt: true, updatedAt: true }).extend({
-    password: z.string().min(6),
 });
-export const UpdateUserSchema = InsertUserSchema.partial().omit({ password: true });
+export const InsertUserSchema = UserSchema.omit({
+  id: true,
+  status: true,
+  role: true,
+  createdAt: true,
+  updatedAt: true,
+}).extend({
+  password: z.string().min(6),
+});
+export const UpdateUserSchema = InsertUserSchema.partial().omit({
+  password: true,
+});
 
 export type User = z.infer<typeof UserSchema>;
 
@@ -36,20 +43,34 @@ export type Session = {
 };
 
 export const AttendenceSchema = z.object({
-    id: z.string(),
-    userId: z.string(),
-    userName: z.string().optional(),
-    manual: z.boolean().default(false),
-    rssi: z.string().nullable(),
-    date: z.date(),
-    entryTime: z.date(),
-    exitTime: z.date().nullable(),
+  id: z.string(),
+  userId: z.string(),
+  userName: z.string().optional(),
+  manual: z.boolean().default(false),
+  rssi: z.string().nullable(),
+  date: z.date(),
+  entryTime: z.date(),
+  exitTime: z.date().nullable(),
 });
 
-export const InsertAttendenceSchema = AttendenceSchema.omit({ id: true });
-export const UpdateAttendenceSchema = InsertAttendenceSchema.partial().omit({
-  userId: true,
+export const InsertAttendenceSchema = AttendenceSchema.omit({
+  id: true,
   date: true,
-  entryTime: true,
+  manual: true,
+  rssi: true,
+}).extend({
+  userId: z.string().min(1,{
+    message: "Employee ID is required",
+  }),
+  entryTime: z.coerce.date(),
+  exitTime: z.coerce.date().optional().nullable(),
 });
+
+export const UpdateAttendenceSchema = InsertAttendenceSchema.partial()
+  .omit({ userId: true, entryTime: true })
+  .extend({
+    exitTime: z.coerce.date().optional().nullable(),
+  });
+
+
 export type Attendence = z.infer<typeof AttendenceSchema>;

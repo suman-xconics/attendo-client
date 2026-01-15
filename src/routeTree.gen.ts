@@ -14,6 +14,7 @@ import { Route as dashboardIndexRouteImport } from './routes/(dashboard)/index'
 import { Route as AuthLoginIndexRouteImport } from './routes/auth/login/index'
 import { Route as dashboardAttendanceIndexRouteImport } from './routes/(dashboard)/attendance/index'
 import { Route as dashboardEmployeeActionIdRouteImport } from './routes/(dashboard)/employee/action/$id'
+import { Route as dashboardAttendanceActionIdRouteImport } from './routes/(dashboard)/attendance/action/$id'
 import { Route as dashboardEmployeeOverviewAllIndexRouteImport } from './routes/(dashboard)/employee/overview/all/index'
 import { Route as dashboardAttendanceLogsAllIndexRouteImport } from './routes/(dashboard)/attendance/logs/all/index'
 import { Route as dashboardEmployeeActionHrIdRouteImport } from './routes/(dashboard)/employee/action/hr/$id'
@@ -44,6 +45,12 @@ const dashboardEmployeeActionIdRoute =
     path: '/employee/action/$id',
     getParentRoute: () => dashboardRouteRoute,
   } as any)
+const dashboardAttendanceActionIdRoute =
+  dashboardAttendanceActionIdRouteImport.update({
+    id: '/attendance/action/$id',
+    path: '/attendance/action/$id',
+    getParentRoute: () => dashboardRouteRoute,
+  } as any)
 const dashboardEmployeeOverviewAllIndexRoute =
   dashboardEmployeeOverviewAllIndexRouteImport.update({
     id: '/employee/overview/all/',
@@ -67,6 +74,7 @@ export interface FileRoutesByFullPath {
   '/': typeof dashboardIndexRoute
   '/attendance': typeof dashboardAttendanceIndexRoute
   '/auth/login': typeof AuthLoginIndexRoute
+  '/attendance/action/$id': typeof dashboardAttendanceActionIdRoute
   '/employee/action/$id': typeof dashboardEmployeeActionIdRoute
   '/employee/action/hr/$id': typeof dashboardEmployeeActionHrIdRoute
   '/attendance/logs/all': typeof dashboardAttendanceLogsAllIndexRoute
@@ -76,6 +84,7 @@ export interface FileRoutesByTo {
   '/': typeof dashboardIndexRoute
   '/attendance': typeof dashboardAttendanceIndexRoute
   '/auth/login': typeof AuthLoginIndexRoute
+  '/attendance/action/$id': typeof dashboardAttendanceActionIdRoute
   '/employee/action/$id': typeof dashboardEmployeeActionIdRoute
   '/employee/action/hr/$id': typeof dashboardEmployeeActionHrIdRoute
   '/attendance/logs/all': typeof dashboardAttendanceLogsAllIndexRoute
@@ -87,6 +96,7 @@ export interface FileRoutesById {
   '/(dashboard)/': typeof dashboardIndexRoute
   '/(dashboard)/attendance/': typeof dashboardAttendanceIndexRoute
   '/auth/login/': typeof AuthLoginIndexRoute
+  '/(dashboard)/attendance/action/$id': typeof dashboardAttendanceActionIdRoute
   '/(dashboard)/employee/action/$id': typeof dashboardEmployeeActionIdRoute
   '/(dashboard)/employee/action/hr/$id': typeof dashboardEmployeeActionHrIdRoute
   '/(dashboard)/attendance/logs/all/': typeof dashboardAttendanceLogsAllIndexRoute
@@ -98,6 +108,7 @@ export interface FileRouteTypes {
     | '/'
     | '/attendance'
     | '/auth/login'
+    | '/attendance/action/$id'
     | '/employee/action/$id'
     | '/employee/action/hr/$id'
     | '/attendance/logs/all'
@@ -107,6 +118,7 @@ export interface FileRouteTypes {
     | '/'
     | '/attendance'
     | '/auth/login'
+    | '/attendance/action/$id'
     | '/employee/action/$id'
     | '/employee/action/hr/$id'
     | '/attendance/logs/all'
@@ -117,6 +129,7 @@ export interface FileRouteTypes {
     | '/(dashboard)/'
     | '/(dashboard)/attendance/'
     | '/auth/login/'
+    | '/(dashboard)/attendance/action/$id'
     | '/(dashboard)/employee/action/$id'
     | '/(dashboard)/employee/action/hr/$id'
     | '/(dashboard)/attendance/logs/all/'
@@ -165,6 +178,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof dashboardEmployeeActionIdRouteImport
       parentRoute: typeof dashboardRouteRoute
     }
+    '/(dashboard)/attendance/action/$id': {
+      id: '/(dashboard)/attendance/action/$id'
+      path: '/attendance/action/$id'
+      fullPath: '/attendance/action/$id'
+      preLoaderRoute: typeof dashboardAttendanceActionIdRouteImport
+      parentRoute: typeof dashboardRouteRoute
+    }
     '/(dashboard)/employee/overview/all/': {
       id: '/(dashboard)/employee/overview/all/'
       path: '/employee/overview/all'
@@ -192,6 +212,7 @@ declare module '@tanstack/react-router' {
 interface dashboardRouteRouteChildren {
   dashboardIndexRoute: typeof dashboardIndexRoute
   dashboardAttendanceIndexRoute: typeof dashboardAttendanceIndexRoute
+  dashboardAttendanceActionIdRoute: typeof dashboardAttendanceActionIdRoute
   dashboardEmployeeActionIdRoute: typeof dashboardEmployeeActionIdRoute
   dashboardEmployeeActionHrIdRoute: typeof dashboardEmployeeActionHrIdRoute
   dashboardAttendanceLogsAllIndexRoute: typeof dashboardAttendanceLogsAllIndexRoute
@@ -201,6 +222,7 @@ interface dashboardRouteRouteChildren {
 const dashboardRouteRouteChildren: dashboardRouteRouteChildren = {
   dashboardIndexRoute: dashboardIndexRoute,
   dashboardAttendanceIndexRoute: dashboardAttendanceIndexRoute,
+  dashboardAttendanceActionIdRoute: dashboardAttendanceActionIdRoute,
   dashboardEmployeeActionIdRoute: dashboardEmployeeActionIdRoute,
   dashboardEmployeeActionHrIdRoute: dashboardEmployeeActionHrIdRoute,
   dashboardAttendanceLogsAllIndexRoute: dashboardAttendanceLogsAllIndexRoute,
