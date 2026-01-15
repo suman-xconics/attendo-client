@@ -1,6 +1,6 @@
 "use client";
 
-import { IconDotsVertical, IconEdit, IconSettings, IconTrash } from "@tabler/icons-react";
+import { IconCalendarEvent, IconDotsVertical, IconEdit, IconFilter, IconSettings, IconTrash } from "@tabler/icons-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import {
@@ -74,9 +74,14 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" sideOffset={5} className="w-[150px]">
           <DropdownMenuItem
+            onSelect={() => handleNavigate(`/attendance/logs/all?search=${data.id}`)}
+          >
+            <IconFilter className="size-4 stroke-[1.5px]" /> Filter Attendance 
+          </DropdownMenuItem>
+          <DropdownMenuItem
             onSelect={() => handleNavigate(`/attendance/action/new?employeeId=${data.id}`)}
           >
-            <IconSettings className="size-4 stroke-[1.5px]" /> Add Attendance 
+            <IconCalendarEvent className="size-4 stroke-[1.5px]" /> Add Attendance 
           </DropdownMenuItem>
           <DropdownMenuItem
             onSelect={() => handleNavigate(`/employee/action/${data.id}`)}
