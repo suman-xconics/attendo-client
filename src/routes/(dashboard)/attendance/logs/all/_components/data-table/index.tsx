@@ -3,7 +3,6 @@
 import { DataTable } from "@/components/data-table/data-table";
 import type { Attendence } from "@/types/db";
 import { getColumns } from "./components/columns";
-
 import { useExportConfig } from "./utils/config";
 import { useListAttendanceData } from "./utils/data-fetching";
 
@@ -22,7 +21,7 @@ export default function AttendanceTable() {
         enableClickRowSelect: false,
         enableKeyboardNavigation: true,
         enableSearch: true,
-        enableDateFilter: false,
+        enableDateFilter: true,
         enableExport: true,
         enableUrlState: true,
         enableColumnFilters: false,
@@ -31,7 +30,7 @@ export default function AttendanceTable() {
         size: "sm",
         columnResizingTableId: "attendance-data-table",
         searchPlaceholder: "Search attendance",
-        defaultSortBy: "date",
+        defaultSortBy: "entryTime",
         defaultSortOrder: "desc",
       }}
     />

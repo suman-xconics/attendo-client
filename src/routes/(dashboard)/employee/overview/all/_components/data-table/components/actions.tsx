@@ -62,7 +62,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         open={open}
         title="Delete Employee"
       />
-      <DropdownMenu modal={false} >
+      <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
@@ -72,12 +72,12 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             <span className="sr-only">Open menu</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="center" sideOffset={5}>
-          {/* <DropdownMenuItem
-            onSelect={() => handleNavigate(`${currentPath}/control/${data.id}`)}
+        <DropdownMenuContent align="end" sideOffset={5} className="w-[150px]">
+          <DropdownMenuItem
+            onSelect={() => handleNavigate(`/attendance/action/new?employeeId=${data.id}`)}
           >
-            <IconSettings className="size-4 stroke-[1.5px]" /> Manage
-          </DropdownMenuItem> */}
+            <IconSettings className="size-4 stroke-[1.5px]" /> Add Attendance 
+          </DropdownMenuItem>
           <DropdownMenuItem
             onSelect={() => handleNavigate(`/employee/action/${data.id}`)}
           >

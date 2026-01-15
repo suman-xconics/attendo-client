@@ -8,6 +8,7 @@ import { getQueryConfig } from "@/lib/query/strategy";
 
 interface AttendanceDetailsParams {
   id: string;
+  enabled?: boolean;
 }
 
 export function useAttendanceDetails(params: AttendanceDetailsParams) {
@@ -18,14 +19,14 @@ export function useAttendanceDetails(params: AttendanceDetailsParams) {
         const { data } = await apiClient.get<Attendence>(`/attendance/${params.id}`);
         return data;
       },
-      enabled: !!params.id,
+      enabled: !!params.id && params.enabled !== false,
     })
   );
 }
 
 export function useListAttendance(params: FPSClientInput) {
   return useQuery(
-    getQueryConfig<Attendence[]>("default", {
+    getQueryConfig<Attendence[]>('realtime', {
       queryKey: queryKeys.attendance.list(params).queryKey,
       queryFn: async () => {
         const { data } = await apiClient.get<Attendence[]>("/attendance", {

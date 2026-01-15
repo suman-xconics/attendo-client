@@ -529,7 +529,7 @@ export function DataTableExport<TData extends ExportableData>({
           )}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="w-55">
         {hasSelection && subRowsConfig?.enabled ? (
           // Subrow tables: Show 4 options
           (<>

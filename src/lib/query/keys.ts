@@ -12,13 +12,12 @@ export const usersKeys = createQueryKeys("users", {
     }),
 });
 
+
 export const attendanceKeys = createQueryKeys("attendance", {
     all: null,
-    details: (id: string) => ({
-        queryKey: [id],
-    }),
+    details: (id: string) => ({ queryKey: [id] }),
     list: (params: FPSClientInput) => ({
-        queryKey: [params],
+        queryKey: [params], // Ensure params is stable/serializable
     }),
     list_by_employee: (employeeId: string, params: FPSClientInput) => ({
         queryKey: [employeeId, params],

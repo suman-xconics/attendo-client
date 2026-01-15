@@ -10,8 +10,8 @@ import { useAttendanceDetails } from "@/hooks/attendance/query";
 import { InsertAttendenceSchema, UpdateAttendenceSchema } from "@/types/db";
 import { createTypedFormIdGenerator } from "@/utils/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "@tanstack/react-router";
-import { useEffect, useRef } from "react";
+import { useNavigate, useParams, useSearch } from "@tanstack/react-router";
+import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import type z from "zod";
@@ -28,14 +28,20 @@ import {
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 interface AttendanceFormProps {
-  id: string;
+  id?: string;
   editMode: boolean;
 }
 
 const AttendanceForm = ({ id, editMode }: AttendanceFormProps) => {
+  const { employeeId } = useSearch({ strict: false });
   const navigate = useNavigate();
+  
   const { data: attendanceDetails, isLoading: isLoadingAttendance } =
-    useAttendanceDetails({ id });
+    useAttendanceDetails({ 
+      id: id!,
+      enabled: editMode && !!id 
+    });
+  
   const { mutate: createAttendance, isPending: isCreatingAttendance } =
     useCreateAttendanceRecord();
   const { mutate: updateAttendance, isPending: isUpdatingAttendance } =
@@ -49,13 +55,15 @@ const AttendanceForm = ({ id, editMode }: AttendanceFormProps) => {
       z.infer<typeof UpdateAttendenceSchema>
   >(BASE_FORM_ID);
 
-  const schema = editMode ? UpdateAttendenceSchema : InsertAttendenceSchema;
+  const schema = useMemo(
+    () => (editMode ? UpdateAttendenceSchema : InsertAttendenceSchema),
+    [editMode]
+  );
 
   const form = useForm<
-    | z.infer<typeof InsertAttendenceSchema>
-    | z.infer<typeof UpdateAttendenceSchema>
+    z.infer<typeof InsertAttendenceSchema> | z.infer<typeof UpdateAttendenceSchema>
   >({
-    resolver: zodResolver(schema as any),
+    resolver: zodResolver(schema),
     defaultValues: {
       userId: "",
       entryTime: new Date(),
@@ -63,6 +71,7 @@ const AttendanceForm = ({ id, editMode }: AttendanceFormProps) => {
     },
   });
 
+  // Reset form with attendance details when in edit mode
   useEffect(() => {
     if (editMode && attendanceDetails) {
       form.reset({
@@ -75,27 +84,32 @@ const AttendanceForm = ({ id, editMode }: AttendanceFormProps) => {
     }
   }, [editMode, attendanceDetails, form]);
 
+  // Set employeeId for create mode
+  useEffect(() => {
+    if (employeeId && !editMode) {
+      form.setValue("userId", employeeId as string);
+    }
+  }, [employeeId, editMode, form]);
+
+  // Reset form when switching from edit to create mode
   useEffect(() => {
     if (!editMode) {
-      form.reset();
+      form.reset({
+        userId: employeeId || "",
+        entryTime: new Date(),
+        exitTime: null,
+      });
     }
-  }, [editMode, form]);
-
-  const handleReset = useRef(() => {
-    form.reset();
-  });
+  }, [editMode, employeeId, form]);
 
   const handleSubmit = (
-    data:
-      | z.infer<typeof InsertAttendenceSchema>
-      | z.infer<typeof UpdateAttendenceSchema>
+    data: z.infer<typeof InsertAttendenceSchema> | z.infer<typeof UpdateAttendenceSchema>
   ) => {
     if (editMode && id) {
       updateAttendance(
         { id, data: data as z.infer<typeof UpdateAttendenceSchema> },
         {
           onSuccess: () => {
-            form.reset(undefined, { keepValues: true });
             toast.success("Attendance updated successfully");
           },
           onError: (error) => {
@@ -110,15 +124,13 @@ const AttendanceForm = ({ id, editMode }: AttendanceFormProps) => {
         { data: data as z.infer<typeof InsertAttendenceSchema> },
         {
           onSuccess: () => {
-            handleReset.current();
+            form.reset();
             toast.success("Attendance record created successfully");
-            navigate({ to: `/attendance/logs/all` });
+            navigate({ to: "/attendance/logs/all" });
           },
           onError: (error) => {
             toast.error(
-              `Error creating attendance record: ${
-                error.message || "Creation failed"
-              }`
+              `Error creating attendance record: ${error.message || "Creation failed"}`
             );
           },
         }
@@ -134,9 +146,9 @@ const AttendanceForm = ({ id, editMode }: AttendanceFormProps) => {
     <Popover>
       <PopoverTrigger asChild>
         <Button
-          variant={"outline"}
+          variant="outline"
           className={cn(
-            "w-full pl-3 text-left font-normal justify-start",
+            "w-full pl-3 text-left font-normal justify-start h-10",
             !field.value && "text-muted-foreground"
           )}
         >
@@ -149,60 +161,58 @@ const AttendanceForm = ({ id, editMode }: AttendanceFormProps) => {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
-        <div className="sm:flex">
+        <div className="flex flex-col sm:flex-row gap-2 p-3">
           <Calendar
             mode="single"
             selected={field.value}
             onSelect={field.onChange}
             initialFocus
+            className="flex-shrink-0"
           />
-          <div className="flex flex-col sm:flex-row sm:h-[300px] divide-y sm:divide-y-0 sm:divide-x">
-            <ScrollArea className="w-64 sm:w-auto">
-              <div className="flex sm:flex-col p-2">
-                {Array.from({ length: 12 }, (_, i) => i + 1)
-                  .reverse()
-                  .map((hour) => (
-                    <Button
-                      key={hour}
-                      size="icon"
-                      variant={
-                        field.value && field.value.getHours() % 12 === hour % 12
-                          ? "default"
-                          : "ghost"
-                      }
-                      className="sm:w-full shrink-0 aspect-square"
-                      onClick={() => {
-                        const currentDate = field.value || new Date();
-                        let newDate = new Date(currentDate);
-                        const hourValue = parseInt(hour.toString(), 10);
-                        newDate.setHours(
-                          newDate.getHours() >= 12 ? hourValue + 12 : hourValue
-                        );
-                        field.onChange(newDate);
-                      }}
-                    >
-                      {hour}
-                    </Button>
-                  ))}
+          <div className="flex flex-col sm:flex-row sm:h-[320px] gap-2 min-w-[280px]">
+            <ScrollArea className="w-20 sm:w-24 h-64 flex-shrink-0">
+              <div className="flex flex-col p-1 gap-1">
+                {Array.from({ length: 12 }, (_, i) => i + 1).map((hour) => (
+                  <Button
+                    key={hour}
+                    variant="ghost"
+                    size="sm"
+                    className={cn(
+                      "h-10 w-10 flex-shrink-0",
+                      field.value?.getHours() % 12 === hour % 12 && "bg-primary text-primary-foreground"
+                    )}
+                    onClick={() => {
+                      const currentDate = field.value || new Date();
+                      let newDate = new Date(currentDate);
+                      const hourValue = hour;
+                      newDate.setHours(
+                        newDate.getHours() >= 12 ? hourValue + 12 - 1 : hourValue - 1
+                      );
+                      field.onChange(newDate);
+                    }}
+                  >
+                    {hour}
+                  </Button>
+                ))}
               </div>
-              <ScrollBar orientation="horizontal" className="sm:hidden" />
+              <ScrollBar />
             </ScrollArea>
-            <ScrollArea className="w-64 sm:w-auto">
-              <div className="flex sm:flex-col p-2">
-                {Array.from({ length: 12 }, (_, i) => i * 5).map((minute) => (
+            
+            <ScrollArea className="w-20 sm:w-24 h-64 flex-shrink-0">
+              <div className="flex flex-col p-1 gap-1">
+                {[0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55].map((minute) => (
                   <Button
                     key={minute}
-                    size="icon"
-                    variant={
-                      field.value && field.value.getMinutes() === minute
-                        ? "default"
-                        : "ghost"
-                    }
-                    className="sm:w-full shrink-0 aspect-square"
+                    variant="ghost"
+                    size="sm"
+                    className={cn(
+                      "h-10 w-10 flex-shrink-0",
+                      field.value?.getMinutes() === minute && "bg-primary text-primary-foreground"
+                    )}
                     onClick={() => {
                       const currentDate = field.value || new Date();
                       const newDate = new Date(currentDate);
-                      newDate.setMinutes(parseInt(minute.toString(), 10));
+                      newDate.setMinutes(minute);
                       field.onChange(newDate);
                     }}
                   >
@@ -210,22 +220,23 @@ const AttendanceForm = ({ id, editMode }: AttendanceFormProps) => {
                   </Button>
                 ))}
               </div>
-              <ScrollBar orientation="horizontal" className="sm:hidden" />
+              <ScrollBar />
             </ScrollArea>
-            <ScrollArea className="">
-              <div className="flex sm:flex-col p-2">
+            
+            <ScrollArea className="w-20 sm:w-24 h-64 flex-shrink-0">
+              <div className="flex flex-col p-1 gap-1">
                 {["AM", "PM"].map((ampm) => (
                   <Button
                     key={ampm}
-                    size="icon"
-                    variant={
-                      field.value &&
+                    variant="ghost"
+                    size="sm"
+                    className={cn(
+                      "h-10 w-10 flex-shrink-0",
+                      field.value && 
                       ((ampm === "AM" && field.value.getHours() < 12) ||
-                        (ampm === "PM" && field.value.getHours() >= 12))
-                        ? "default"
-                        : "ghost"
-                    }
-                    className="sm:w-full shrink-0 aspect-square"
+                       (ampm === "PM" && field.value.getHours() >= 12)) && 
+                      "bg-primary text-primary-foreground"
+                    )}
                     onClick={() => {
                       const currentDate = field.value || new Date();
                       let newDate = new Date(currentDate);
@@ -242,6 +253,7 @@ const AttendanceForm = ({ id, editMode }: AttendanceFormProps) => {
                   </Button>
                 ))}
               </div>
+              <ScrollBar />
             </ScrollArea>
           </div>
         </div>
@@ -256,33 +268,37 @@ const AttendanceForm = ({ id, editMode }: AttendanceFormProps) => {
       formId={BASE_FORM_ID}
       id={BASE_FORM_ID}
       resetButton
-      onReset={() => handleReset.current()}
+      onReset={() => form.reset()}
       onSubmit={form.handleSubmit(handleSubmit)}
       submitButton
       submitButtonLoading={isCreatingAttendance || isUpdatingAttendance}
-      submitButtonLoadingText={editMode ? "Updating" : "Adding"}
-      submitButtonText={editMode ? "Update" : "Add"}
+      submitButtonLoadingText={editMode ? "Updating..." : "Creating..."}
+      submitButtonText={editMode ? "Update Attendance" : "Create Attendance"}
     >
       <FormControllerWrapper
         control={form.control}
         fieldId={getFieldId("userId")}
         name="userId"
-        placeholder="Employee ID"
+        placeholder="Enter employee ID"
         label="Employee ID"
         type="input"
+        disabled={!!employeeId && !editMode}
       />
 
       <FormControllerWrapper
         control={form.control}
         fieldId={getFieldId("entryTime")}
         name="entryTime"
+        label="Entry Time *"
         type="custom"
         render={renderDateTimePicker}
       />
+      
       <FormControllerWrapper
         control={form.control}
         fieldId={getFieldId("exitTime")}
         name="exitTime"
+        label="Exit Time"
         type="custom"
         render={renderDateTimePicker}
       />
