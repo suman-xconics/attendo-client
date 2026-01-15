@@ -1,7 +1,6 @@
 import type { UserRoles } from "@/types/db";
 import type { SidebarItem } from "@/types/sidebar";
 
-
 export const getRoleBasedSidebarItems = (role?: UserRoles): SidebarItem[] => {
   const baseMenu: SidebarItem[] = [
     {
@@ -16,12 +15,6 @@ export const getRoleBasedSidebarItems = (role?: UserRoles): SidebarItem[] => {
           label: "Dashboard",
           route: "/",
         },
-        // {
-        //   id: "reports",
-        //   groupLabel: "overview",
-        //   label: "Reports",
-        //   route: "/report",
-        // },
       ],
     },
     {
@@ -42,12 +35,16 @@ export const getRoleBasedSidebarItems = (role?: UserRoles): SidebarItem[] => {
           label: "Create",
           route: "/employee/action/new",
         },
-        {
-          id: "create_hr",
-          groupLabel: "action",
-          label: "Create HR",
-          route: "/employee/action/hr/new",
-        },
+        // Conditionally hide "Create HR" for HR role
+        ...(role !== "HR" 
+          ? [{
+              id: "create_hr",
+              groupLabel: "action",
+              label: "Create HR",
+              route: "/employee/action/hr/new",
+            }]
+          : []
+        ),
       ],
     },
     {
@@ -72,7 +69,7 @@ export const getRoleBasedSidebarItems = (role?: UserRoles): SidebarItem[] => {
     },
   ];
 
-  // Role-based filtering
+  // Role-based filtering for entire menu items
   const filteredMenu = baseMenu.filter((item) => {
     if (item.id === "Employee" && role === "EMPLOYEE") {
       return false; // Hide Employee menu for EMPLOYEE role

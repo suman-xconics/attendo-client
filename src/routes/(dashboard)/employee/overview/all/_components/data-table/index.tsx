@@ -21,7 +21,7 @@ export default function EmployeeTable() {
         enableClickRowSelect: false,
         enableKeyboardNavigation: true,
         enableSearch: true,
-        enableDateFilter: true,
+        enableDateFilter: false,
         enableExport: true,
         enableUrlState: true,
         enableColumnFilters: false,

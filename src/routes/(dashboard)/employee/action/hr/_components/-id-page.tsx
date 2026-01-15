@@ -13,7 +13,7 @@ export function IdPage({ id }: IdPageProps) {
         <PageContentContainer>
             <ContentHeader
                 goBackButton
-                title={newPage ? "Add Hr Account" : `Hr Account ID: ${id}`}
+                title={newPage ? "Add New Hr Account" : `Hr Account ID: ${id}`}
             />
             <EmployeeForm id={id} editMode={!newPage} />
         </PageContentContainer>

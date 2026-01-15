@@ -11,7 +11,7 @@ interface EmployeeDetailsParams {
 }
 
 
-export function useEmployeeDetails(params: EmployeeDetailsParams) {
+export function useEmployeeDetails(params: EmployeeDetailsParams, p0?: { enabled: boolean; }) {
   return useQuery(
     getQueryConfig<User>("stable", {
       queryKey: queryKeys.users.details(params.id).queryKey,
