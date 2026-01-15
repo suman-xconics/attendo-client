@@ -12,8 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as dashboardRouteRouteImport } from './routes/(dashboard)/route'
 import { Route as dashboardIndexRouteImport } from './routes/(dashboard)/index'
 import { Route as AuthLoginIndexRouteImport } from './routes/auth/login/index'
+import { Route as dashboardAttendanceIndexRouteImport } from './routes/(dashboard)/attendance/index'
 import { Route as dashboardEmployeeActionIdRouteImport } from './routes/(dashboard)/employee/action/$id'
 import { Route as dashboardEmployeeOverviewAllIndexRouteImport } from './routes/(dashboard)/employee/overview/all/index'
+import { Route as dashboardAttendanceLogsAllIndexRouteImport } from './routes/(dashboard)/attendance/logs/all/index'
 import { Route as dashboardEmployeeActionHrIdRouteImport } from './routes/(dashboard)/employee/action/hr/$id'
 
 const dashboardRouteRoute = dashboardRouteRouteImport.update({
@@ -30,6 +32,12 @@ const AuthLoginIndexRoute = AuthLoginIndexRouteImport.update({
   path: '/auth/login/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const dashboardAttendanceIndexRoute =
+  dashboardAttendanceIndexRouteImport.update({
+    id: '/attendance/',
+    path: '/attendance/',
+    getParentRoute: () => dashboardRouteRoute,
+  } as any)
 const dashboardEmployeeActionIdRoute =
   dashboardEmployeeActionIdRouteImport.update({
     id: '/employee/action/$id',
@@ -42,6 +50,12 @@ const dashboardEmployeeOverviewAllIndexRoute =
     path: '/employee/overview/all/',
     getParentRoute: () => dashboardRouteRoute,
   } as any)
+const dashboardAttendanceLogsAllIndexRoute =
+  dashboardAttendanceLogsAllIndexRouteImport.update({
+    id: '/attendance/logs/all/',
+    path: '/attendance/logs/all/',
+    getParentRoute: () => dashboardRouteRoute,
+  } as any)
 const dashboardEmployeeActionHrIdRoute =
   dashboardEmployeeActionHrIdRouteImport.update({
     id: '/employee/action/hr/$id',
@@ -51,49 +65,61 @@ const dashboardEmployeeActionHrIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof dashboardIndexRoute
+  '/attendance': typeof dashboardAttendanceIndexRoute
   '/auth/login': typeof AuthLoginIndexRoute
   '/employee/action/$id': typeof dashboardEmployeeActionIdRoute
   '/employee/action/hr/$id': typeof dashboardEmployeeActionHrIdRoute
+  '/attendance/logs/all': typeof dashboardAttendanceLogsAllIndexRoute
   '/employee/overview/all': typeof dashboardEmployeeOverviewAllIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof dashboardIndexRoute
+  '/attendance': typeof dashboardAttendanceIndexRoute
   '/auth/login': typeof AuthLoginIndexRoute
   '/employee/action/$id': typeof dashboardEmployeeActionIdRoute
   '/employee/action/hr/$id': typeof dashboardEmployeeActionHrIdRoute
+  '/attendance/logs/all': typeof dashboardAttendanceLogsAllIndexRoute
   '/employee/overview/all': typeof dashboardEmployeeOverviewAllIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/(dashboard)': typeof dashboardRouteRouteWithChildren
   '/(dashboard)/': typeof dashboardIndexRoute
+  '/(dashboard)/attendance/': typeof dashboardAttendanceIndexRoute
   '/auth/login/': typeof AuthLoginIndexRoute
   '/(dashboard)/employee/action/$id': typeof dashboardEmployeeActionIdRoute
   '/(dashboard)/employee/action/hr/$id': typeof dashboardEmployeeActionHrIdRoute
+  '/(dashboard)/attendance/logs/all/': typeof dashboardAttendanceLogsAllIndexRoute
   '/(dashboard)/employee/overview/all/': typeof dashboardEmployeeOverviewAllIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/attendance'
     | '/auth/login'
     | '/employee/action/$id'
     | '/employee/action/hr/$id'
+    | '/attendance/logs/all'
     | '/employee/overview/all'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/attendance'
     | '/auth/login'
     | '/employee/action/$id'
     | '/employee/action/hr/$id'
+    | '/attendance/logs/all'
     | '/employee/overview/all'
   id:
     | '__root__'
     | '/(dashboard)'
     | '/(dashboard)/'
+    | '/(dashboard)/attendance/'
     | '/auth/login/'
     | '/(dashboard)/employee/action/$id'
     | '/(dashboard)/employee/action/hr/$id'
+    | '/(dashboard)/attendance/logs/all/'
     | '/(dashboard)/employee/overview/all/'
   fileRoutesById: FileRoutesById
 }
@@ -125,6 +151,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(dashboard)/attendance/': {
+      id: '/(dashboard)/attendance/'
+      path: '/attendance'
+      fullPath: '/attendance'
+      preLoaderRoute: typeof dashboardAttendanceIndexRouteImport
+      parentRoute: typeof dashboardRouteRoute
+    }
     '/(dashboard)/employee/action/$id': {
       id: '/(dashboard)/employee/action/$id'
       path: '/employee/action/$id'
@@ -139,6 +172,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof dashboardEmployeeOverviewAllIndexRouteImport
       parentRoute: typeof dashboardRouteRoute
     }
+    '/(dashboard)/attendance/logs/all/': {
+      id: '/(dashboard)/attendance/logs/all/'
+      path: '/attendance/logs/all'
+      fullPath: '/attendance/logs/all'
+      preLoaderRoute: typeof dashboardAttendanceLogsAllIndexRouteImport
+      parentRoute: typeof dashboardRouteRoute
+    }
     '/(dashboard)/employee/action/hr/$id': {
       id: '/(dashboard)/employee/action/hr/$id'
       path: '/employee/action/hr/$id'
@@ -151,15 +191,19 @@ declare module '@tanstack/react-router' {
 
 interface dashboardRouteRouteChildren {
   dashboardIndexRoute: typeof dashboardIndexRoute
+  dashboardAttendanceIndexRoute: typeof dashboardAttendanceIndexRoute
   dashboardEmployeeActionIdRoute: typeof dashboardEmployeeActionIdRoute
   dashboardEmployeeActionHrIdRoute: typeof dashboardEmployeeActionHrIdRoute
+  dashboardAttendanceLogsAllIndexRoute: typeof dashboardAttendanceLogsAllIndexRoute
   dashboardEmployeeOverviewAllIndexRoute: typeof dashboardEmployeeOverviewAllIndexRoute
 }
 
 const dashboardRouteRouteChildren: dashboardRouteRouteChildren = {
   dashboardIndexRoute: dashboardIndexRoute,
+  dashboardAttendanceIndexRoute: dashboardAttendanceIndexRoute,
   dashboardEmployeeActionIdRoute: dashboardEmployeeActionIdRoute,
   dashboardEmployeeActionHrIdRoute: dashboardEmployeeActionHrIdRoute,
+  dashboardAttendanceLogsAllIndexRoute: dashboardAttendanceLogsAllIndexRoute,
   dashboardEmployeeOverviewAllIndexRoute:
     dashboardEmployeeOverviewAllIndexRoute,
 }

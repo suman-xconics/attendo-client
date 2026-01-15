@@ -372,7 +372,7 @@ export function DataTableToolbar<TData extends ExportableData>({
             placeholder={config.searchPlaceholder || `Search ${entityName}...`}
             value={localSearch}
             onChange={handleSearchChange}
-            className={`w-[150px] lg:w-[250px] ${getInputSizeClass(config.size)}`}
+            className={`w-37.5 lg:w-62.5 ${getInputSizeClass(config.size)}`}
           />
         )}
 

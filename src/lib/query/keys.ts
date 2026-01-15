@@ -1,7 +1,6 @@
 // lib/api/query-keys.ts
 import type { FPSClientInput } from "@/utils/query/fps-client-builder";
 import { createQueryKeys } from "@lukemorales/query-key-factory";
-import id from "zod/v4/locales/id.cjs";
 
 export const usersKeys = createQueryKeys("users", {
     all: null,
@@ -13,7 +12,21 @@ export const usersKeys = createQueryKeys("users", {
     }),
 });
 
+export const attendanceKeys = createQueryKeys("attendance", {
+    all: null,
+    details: (id: string) => ({
+        queryKey: [id],
+    }),
+    list: (params: FPSClientInput) => ({
+        queryKey: [params],
+    }),
+    list_by_employee: (employeeId: string, params: FPSClientInput) => ({
+        queryKey: [employeeId, params],
+    }),
+});
+
 
 export const queryKeys = {
     users: usersKeys,
+    attendance: attendanceKeys,
 };

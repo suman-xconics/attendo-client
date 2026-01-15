@@ -35,14 +35,13 @@ export const getRoleBasedSidebarItems = (role?: UserRoles): SidebarItem[] => {
           label: "Create",
           route: "/employee/action/new",
         },
-        // Conditionally hide "Create HR" for HR role
-        ...(role !== "HR" 
+        ...(role === "ADMIN"
           ? [{
-              id: "create_hr",
-              groupLabel: "action",
-              label: "Create HR",
-              route: "/employee/action/hr/new",
-            }]
+            id: "create_hr",
+            groupLabel: "action",
+            label: "Create HR",
+            route: "/employee/action/hr/new",
+          }]
           : []
         ),
       ],
@@ -55,16 +54,21 @@ export const getRoleBasedSidebarItems = (role?: UserRoles): SidebarItem[] => {
       subItems: [
         {
           id: "logs",
-          groupLabel: "Logs",
+          groupLabel: "logs",
           label: "All Logs",
-          route: "/attendance/action/logs",
+          route: "/attendance/logs/all",
         },
-        {
-          id: "enter_attendance",
-          groupLabel: "action",
-          label: "Add Record",
-          route: "/attendance/action/add-record",
-        },
+        ...(role !== "EMPLOYEE"
+          ? [
+            {
+              id: "action",
+              groupLabel: "action",
+              label: "Add Manual Entry",
+              route: "/attendance/action/new",
+            },
+          ]
+          : []
+        ),
       ],
     },
   ];

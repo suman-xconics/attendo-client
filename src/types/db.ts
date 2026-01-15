@@ -38,8 +38,9 @@ export type Session = {
 export const AttendenceSchema = z.object({
     id: z.string(),
     userId: z.string(),
+    userName: z.string().optional(),
+    manual: z.boolean().default(false),
     rssi: z.string().nullable(),
-    deviceTime: z.date(),
     date: z.date(),
     entryTime: z.date(),
     exitTime: z.date().nullable(),
