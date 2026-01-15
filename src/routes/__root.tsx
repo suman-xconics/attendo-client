@@ -6,6 +6,7 @@ import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import { Suspense } from 'react';
 import { useAuth } from '@/provider/auth';
 import { Toaster } from '@/components/ui/sonner';
+import { QueryProvider } from '@/provider/query-client';
 
 function AuthGuard({ children }: { children: React.ReactNode }) {
   const { user, isPending } = useAuth();
@@ -41,13 +42,15 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
 }
 
 const RootLayout = () => (
-  <Suspense fallback={<Loader fullHeight />}>
-    <AuthGuard>
-      <Outlet />
-      <Toaster position="bottom-right" closeButton />
-      {import.meta.env.DEV && <TanStackRouterDevtools />}
-    </AuthGuard>
-  </Suspense>
+  <QueryProvider>
+    <Suspense fallback={<Loader fullHeight />}>
+      <AuthGuard>
+        <Outlet />
+        <Toaster position="bottom-right" closeButton />
+        {import.meta.env.DEV && <TanStackRouterDevtools />}
+      </AuthGuard>
+    </Suspense>
+  </QueryProvider>
 );
 
 export const Route = createRootRoute({ component: RootLayout });

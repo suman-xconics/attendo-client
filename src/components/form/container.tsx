@@ -106,7 +106,6 @@ const FormContainer = <TFormValues extends FieldValues = FieldValues>({
             loadingText={submitButtonLoadingText}
             size={"sm"}
             type="submit"
-            variant={"gradient"}
           >
             {submitButtonText}{" "}
             <Icon className="size-5 shrink-0 stroke-[1.5px]" />

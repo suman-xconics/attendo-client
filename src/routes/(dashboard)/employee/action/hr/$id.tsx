@@ -5,12 +5,12 @@ interface RouteParams {
   id: string
 }
 
-export const Route = createFileRoute('/(dashboard)/employee/action/$id')({
+export const Route = createFileRoute('/(dashboard)/employee/action/hr/$id')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const { id } = useParams({ from: '/(dashboard)/employee/action/$id' }) as RouteParams
+  const { id } = useParams({ from: '/(dashboard)/employee/action/hr/$id' }) as RouteParams
 
   return (
       <IdPage id={id} />

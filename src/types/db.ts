@@ -1,19 +1,28 @@
+import z from "zod";
+
 export type UserRoles = "USER" | "ADMIN" | "HR" | "EMPLOYEE";
 export type UserStatus = "ACTIVE" | "INACTIVE" | "BANNED" | "PENDING";
 
-export type User = {
-  id: string;
-  email: string;
-  name: string | null;
-  emailVerified: boolean;
-  image: string | null;
-  phoneNumber: string | null;
-  status: UserStatus;
-  role: UserRoles;
-  macAddress: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-};
+export const UserSchema = z.object({
+  id: z.string(),
+  email: z.string().email(),
+  name: z.string().min(2).max(100),
+  emailVerified: z.boolean().optional(),
+  image: z.string().optional().nullable(),
+  phoneNumber: z.string().optional().nullable(),
+  status: z.enum(["ACTIVE", "INACTIVE", "BANNED", "PENDING"]),
+  role: z.enum(["USER", "ADMIN", "HR", "EMPLOYEE"]),
+  macAddress: z.string().optional().nullable(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+})
+export const InsertUserSchema = UserSchema.omit({ id: true,
+  status: true, role: true, createdAt: true, updatedAt: true }).extend({
+    password: z.string().min(6),
+});
+export const UpdateUserSchema = InsertUserSchema.partial().omit({ password: true });
+
+export type User = z.infer<typeof UserSchema>;
 
 export type Session = {
   id: string;
@@ -26,12 +35,20 @@ export type Session = {
   userId: string;
 };
 
-export type Attendence = {
-    id: string;
-    userId: string;
-    rssi: string | null;
-    deviceTime: Date;
-    date: Date;
-    entryTime: Date;
-    exitTime: Date | null;
-};
+export const AttendenceSchema = z.object({
+    id: z.string(),
+    userId: z.string(),
+    rssi: z.string().nullable(),
+    deviceTime: z.date(),
+    date: z.date(),
+    entryTime: z.date(),
+    exitTime: z.date().nullable(),
+});
+
+export const InsertAttendenceSchema = AttendenceSchema.omit({ id: true });
+export const UpdateAttendenceSchema = InsertAttendenceSchema.partial().omit({
+  userId: true,
+  date: true,
+  entryTime: true,
+});
+export type Attendence = z.infer<typeof AttendenceSchema>;

@@ -1,6 +1,6 @@
 import PageContentContainer from "@/components/layout/container/page-content"
 import ContentHeader from "@/components/layout/container/page-content-header"
-import EmployeeForm from "./form"
+import EmployeeForm from "./-form"
 
 interface IdPageProps {
     id: string

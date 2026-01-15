@@ -14,6 +14,7 @@ import { Route as dashboardIndexRouteImport } from './routes/(dashboard)/index'
 import { Route as AuthLoginIndexRouteImport } from './routes/auth/login/index'
 import { Route as dashboardEmployeeActionIdRouteImport } from './routes/(dashboard)/employee/action/$id'
 import { Route as dashboardEmployeeOverviewAllIndexRouteImport } from './routes/(dashboard)/employee/overview/all/index'
+import { Route as dashboardEmployeeActionHrIdRouteImport } from './routes/(dashboard)/employee/action/hr/$id'
 
 const dashboardRouteRoute = dashboardRouteRouteImport.update({
   id: '/(dashboard)',
@@ -41,17 +42,25 @@ const dashboardEmployeeOverviewAllIndexRoute =
     path: '/employee/overview/all/',
     getParentRoute: () => dashboardRouteRoute,
   } as any)
+const dashboardEmployeeActionHrIdRoute =
+  dashboardEmployeeActionHrIdRouteImport.update({
+    id: '/employee/action/hr/$id',
+    path: '/employee/action/hr/$id',
+    getParentRoute: () => dashboardRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof dashboardIndexRoute
   '/auth/login': typeof AuthLoginIndexRoute
   '/employee/action/$id': typeof dashboardEmployeeActionIdRoute
+  '/employee/action/hr/$id': typeof dashboardEmployeeActionHrIdRoute
   '/employee/overview/all': typeof dashboardEmployeeOverviewAllIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof dashboardIndexRoute
   '/auth/login': typeof AuthLoginIndexRoute
   '/employee/action/$id': typeof dashboardEmployeeActionIdRoute
+  '/employee/action/hr/$id': typeof dashboardEmployeeActionHrIdRoute
   '/employee/overview/all': typeof dashboardEmployeeOverviewAllIndexRoute
 }
 export interface FileRoutesById {
@@ -60,6 +69,7 @@ export interface FileRoutesById {
   '/(dashboard)/': typeof dashboardIndexRoute
   '/auth/login/': typeof AuthLoginIndexRoute
   '/(dashboard)/employee/action/$id': typeof dashboardEmployeeActionIdRoute
+  '/(dashboard)/employee/action/hr/$id': typeof dashboardEmployeeActionHrIdRoute
   '/(dashboard)/employee/overview/all/': typeof dashboardEmployeeOverviewAllIndexRoute
 }
 export interface FileRouteTypes {
@@ -68,15 +78,22 @@ export interface FileRouteTypes {
     | '/'
     | '/auth/login'
     | '/employee/action/$id'
+    | '/employee/action/hr/$id'
     | '/employee/overview/all'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth/login' | '/employee/action/$id' | '/employee/overview/all'
+  to:
+    | '/'
+    | '/auth/login'
+    | '/employee/action/$id'
+    | '/employee/action/hr/$id'
+    | '/employee/overview/all'
   id:
     | '__root__'
     | '/(dashboard)'
     | '/(dashboard)/'
     | '/auth/login/'
     | '/(dashboard)/employee/action/$id'
+    | '/(dashboard)/employee/action/hr/$id'
     | '/(dashboard)/employee/overview/all/'
   fileRoutesById: FileRoutesById
 }
@@ -122,18 +139,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof dashboardEmployeeOverviewAllIndexRouteImport
       parentRoute: typeof dashboardRouteRoute
     }
+    '/(dashboard)/employee/action/hr/$id': {
+      id: '/(dashboard)/employee/action/hr/$id'
+      path: '/employee/action/hr/$id'
+      fullPath: '/employee/action/hr/$id'
+      preLoaderRoute: typeof dashboardEmployeeActionHrIdRouteImport
+      parentRoute: typeof dashboardRouteRoute
+    }
   }
 }
 
 interface dashboardRouteRouteChildren {
   dashboardIndexRoute: typeof dashboardIndexRoute
   dashboardEmployeeActionIdRoute: typeof dashboardEmployeeActionIdRoute
+  dashboardEmployeeActionHrIdRoute: typeof dashboardEmployeeActionHrIdRoute
   dashboardEmployeeOverviewAllIndexRoute: typeof dashboardEmployeeOverviewAllIndexRoute
 }
 
 const dashboardRouteRouteChildren: dashboardRouteRouteChildren = {
   dashboardIndexRoute: dashboardIndexRoute,
   dashboardEmployeeActionIdRoute: dashboardEmployeeActionIdRoute,
+  dashboardEmployeeActionHrIdRoute: dashboardEmployeeActionHrIdRoute,
   dashboardEmployeeOverviewAllIndexRoute:
     dashboardEmployeeOverviewAllIndexRoute,
 }

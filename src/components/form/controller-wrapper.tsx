@@ -337,7 +337,7 @@ export function FormControllerWrapper<T extends FieldValues>(
                     {...props.inputProps}
                     aria-invalid={fieldState.invalid}
                     autoComplete={props.autoComplete || "off"}
-                    className={cn("flex-1",
+                    className={cn("flex-1 rounded-r-none",
                       props.buttonVarient === "secondary" && "border-r-transparent"
                     )}
                     id={fieldId}
@@ -355,7 +355,8 @@ export function FormControllerWrapper<T extends FieldValues>(
                   <Button
                     disabled={props.buttonDisabled}
                     onClick={props.onButtonClick}
-                    size="icon-lg"
+                    size="icon-sm"
+                    className="rounded-l-none"
                     variant={
                       props.buttonVarient
                         ? props.buttonVarient

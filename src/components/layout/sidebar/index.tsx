@@ -1,6 +1,6 @@
 "use client";
 
-import { myPanelSidebarItems } from "@/constants/menu";
+import { getRoleBasedSidebarItems } from "@/constants/menu";
 import {
   Sidebar,
   SidebarContent,
@@ -22,14 +22,19 @@ import { useLocation, useRouter } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import type { SidebarItem } from "@/types/sidebar";
 import { getIcon } from "@/utils/get-icon";
+import { useAuth } from "@/provider/auth";
 
 export function AppSidebar() {
   const pathname = useLocation().pathname;
+  const { role } = useAuth()
   const router = useRouter();
+
+   const sidebarItems = getRoleBasedSidebarItems(role ? role : undefined);
+
 
   // FIXED: Proper active state detection with exact matching
   const activeState = useMemo(() => {
-    for (const item of myPanelSidebarItems) {
+    for (const item of  sidebarItems) {
       if (item.subItems) {
         for (const subItem of item.subItems) {
           if (subItem.route === pathname) {
@@ -54,7 +59,7 @@ export function AppSidebar() {
   }, [activeState]);
 
   const activeItemData = useMemo(
-    () => myPanelSidebarItems.find((item) => item.id === activeItem),
+    () => sidebarItems.find((item) => item.id === activeItem),
     [activeItem]
   );
 
@@ -130,7 +135,7 @@ export function AppSidebar() {
             <SidebarGroup>
               <SidebarGroupContent>
                 <SidebarMenu>
-                  {myPanelSidebarItems.map((item) => {
+                  {sidebarItems.map((item) => {
                     const Icon = item.icon ? getIcon(item.icon) : getIcon("IconCommand");
                     const isActive = activeItem === item.id;
                     const hasActiveChild = item.subItems?.some(subItem =>

@@ -6,6 +6,7 @@ export const env = createEnv({
 
   client: {
     VITE_PUBLIC_AUTH_API_URL: z.string().url(),
+    VITE_PUBLIC_SERVER_API_URL: z.string().url(),
   },
   runtimeEnv: import.meta.env,
   emptyStringAsUndefined: true,
