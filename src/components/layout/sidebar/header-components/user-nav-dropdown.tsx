@@ -69,7 +69,7 @@ function UserNavDropdownContent() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup className="space-y-1 my-1">
-          <DropdownMenuItem
+          {/* <DropdownMenuItem
             className="group h-11 cursor-pointer text-sm"
             onClick={() => navigate({ to: "/(dashboard)/account" })}
           >
@@ -77,7 +77,7 @@ function UserNavDropdownContent() {
               <IconUser className="size-6 shrink-0 stroke-[1.5px] text-primary transition-colors duration-200" />
             </Button>
             Account
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
         </DropdownMenuGroup>
         <DropdownMenuGroup>
           <DropdownMenuItem
