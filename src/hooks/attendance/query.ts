@@ -6,10 +6,10 @@ import type { Attendence } from "@/types/db";
 import type { FPSClientInput } from "@/utils/query/fps-client-builder";
 import { getQueryConfig } from "@/lib/query/strategy";
 
-interface AttendanceDetailsParams {
-  id: string;
-  enabled?: boolean;
-}
+// interface AttendanceDetailsParams {
+//   id: string;
+//   enabled?: boolean;
+// }
 
 // export function useAttendanceDetails(params: AttendanceDetailsParams) {
 //   return useQuery(

@@ -73,11 +73,11 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" sideOffset={5} className="w-[150px]">
-          <DropdownMenuItem
+          {/* <DropdownMenuItem
             onSelect={() => handleNavigate(`/attendance/logs/all?search=${data.macAddress}`)}
           >
             <IconFilter className="size-4 stroke-[1.5px]" /> Filter Attendance 
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
           <DropdownMenuItem
             onSelect={() => handleNavigate(`/attendance/action/new?employeeMacAddress=${data.macAddress}`)}
           >

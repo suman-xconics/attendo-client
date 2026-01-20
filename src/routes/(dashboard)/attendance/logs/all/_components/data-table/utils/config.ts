@@ -1,17 +1,17 @@
 import type { DataTransformFunction } from "@/components/data-table/utils";
 import type { Attendence } from "@/types/db";
-import { formatDate } from "@/utils/format";
+import { format } from "date-fns";
 import { useMemo } from "react";
 
 /**
- * Export configuration for org clients data table
+ * Export configuration for attendance data table
  */
 export function useExportConfig() {
   // Column mapping for export
   const columnMapping = useMemo(
     () => ({
-      row_id: "ID",
-      id_value: "Mac Address",
+      // row_id: "Row ID",
+      id_value: "ID Value",
       person_name: "Person Name",
       date: "Date",
       entry_time: "Entry Time",
@@ -23,25 +23,25 @@ export function useExportConfig() {
   // Column widths for Excel export
   const columnWidths = useMemo(
     () => [
-      { wch: 35 }, // ID
-      { wch: 30 }, // Mac Address
-      { wch: 40 }, // Person Name
-      { wch: 20 }, // Date
+      // { wch: 15 }, // Row ID
+      { wch: 15 }, // ID Value
+      { wch: 25 }, // Person Name
+      { wch: 15 }, // Date
       { wch: 20 }, // Entry Time
       { wch: 20 }, // Exit Time
     ],
     []
   );
 
-  // Headers for CSV export
+  // Headers for CSV/Excel export
   const headers = useMemo(
     () => [
-      "ID",
-      "Mac Address",
-      "Person Name",
-      "Date",
-      "Entry Time",
-      "Exit Time",
+      // "row_id",
+      "id_value",
+      "person_name",
+      "date",
+      "entry_time",
+      "exit_time",
     ],
     []
   );
@@ -50,12 +50,12 @@ export function useExportConfig() {
   const transformFunction: DataTransformFunction<Attendence> = useMemo(
     () => (row: Attendence) => {
       return {
-        row_id: row.row_id,
-        id_value: row.id_value,
-        person_name: row.person_name,
-        date: formatDate(row.date),
-        entry_time: formatDate(row.entry_time, {}, true),
-        exit_time: formatDate(row.exit_time, {}, true),
+        // row_id: row.row_id || "",
+        id_value: row.id_value || "N/A",
+        person_name: row.person_name || "N/A",
+        date: row.date ? format(new Date(row.date), "MMM dd, yyyy") : "N/A",
+        entry_time: row.entry_time ? format(new Date(row.entry_time), "MMM dd, yyyy hh:mm a") : "N/A",
+        exit_time: row.exit_time ? format(new Date(row.exit_time), "MMM dd, yyyy hh:mm a") : "N/A",
       };
     },
     []
@@ -65,7 +65,7 @@ export function useExportConfig() {
     columnMapping,
     columnWidths,
     headers,
-    entityName: "Attendance Logs",
+    entityName: "attendance-logs",
     transformFunction,
   };
 }

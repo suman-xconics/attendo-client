@@ -12,7 +12,6 @@ export const cacheConfig = {
     refetchOnWindowFocus: true,
     refetchOnReconnect: true,
     refetchIntervalInBackground: true,
-    retry: 1,
   },
 
 

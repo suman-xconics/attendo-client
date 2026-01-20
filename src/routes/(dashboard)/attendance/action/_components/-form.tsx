@@ -55,11 +55,11 @@ const AttendanceForm = ({ id, editMode }: AttendanceFormProps) => {
     },
   });
 
-  useEffect(() => {
-    if (employeeMacAddress && !editMode) {
-      form.setValue("id_value", employeeMacAddress);
-    }
-  }, [employeeMacAddress, editMode, form]);
+useEffect(() => {
+  if (employeeMacAddress && !editMode) {
+    form.setValue("id_value", String(employeeMacAddress));
+  }
+}, [employeeMacAddress, editMode, form]);
 
   const handleReset = useRef(() => {
     form.reset();
