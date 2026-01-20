@@ -76,7 +76,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           {/* <DropdownMenuItem
             onSelect={() => handleNavigate(`/attendance/logs/all?search=${data.macAddress}`)}
           >
-            <IconFilter className="size-4 stroke-[1.5px]" /> Filter Attendance 
+            <IconFilter className="size-4 stroke-[1.5px]" /> Attendance List
           </DropdownMenuItem> */}
           <DropdownMenuItem
             onSelect={() => handleNavigate(`/attendance/action/new?employeeMacAddress=${data.macAddress}`)}
