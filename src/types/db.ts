@@ -1,7 +1,6 @@
 import z from "zod";
 
 export type UserRoles = "USER" | "ADMIN" | "HR" | "EMPLOYEE";
-export type UserStatus = "ACTIVE" | "INACTIVE" | "BANNED" | "PENDING";
 
 export const UserSchema = z.object({
   id: z.string(),
@@ -9,16 +8,14 @@ export const UserSchema = z.object({
   name: z.string().min(2).max(100),
   emailVerified: z.boolean().optional(),
   image: z.string().optional().nullable(),
-  phoneNumber: z.string().optional().nullable(),
-  status: z.enum(["ACTIVE", "INACTIVE", "BANNED", "PENDING"]),
   role: z.enum(["USER", "ADMIN", "HR", "EMPLOYEE"]),
   macAddress: z.string().optional().nullable(),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
+
 export const InsertUserSchema = UserSchema.omit({
   id: true,
-  status: true,
   role: true,
   createdAt: true,
   updatedAt: true,
@@ -43,34 +40,23 @@ export type Session = {
 };
 
 export const AttendenceSchema = z.object({
-  id: z.string(),
-  userId: z.string(),
-  userName: z.string().optional(),
-  manual: z.boolean().default(false),
-  rssi: z.string().nullable(),
-  date: z.date(),
-  entryTime: z.date(),
-  exitTime: z.date().nullable(),
+  row_id: z.string(),
+  id_value: z.string().nullable(),
+  person_name: z.string().nullable(),
+  date: z.coerce.date(),
+  entry_time: z.coerce.date(),
+  exit_time: z.coerce.date(),
 });
 
 export const InsertAttendenceSchema = AttendenceSchema.omit({
-  id: true,
+  row_id: true,
   date: true,
-  manual: true,
-  rssi: true,
+  person_name: true,
 }).extend({
-  userId: z.string().min(1,{
-    message: "Employee ID is required",
-  }),
-  entryTime: z.coerce.date(),
-  exitTime: z.coerce.date().optional().nullable(),
+  entry_time: z.coerce.date(),
+  exit_time: z.coerce.date(),
 });
 
-export const UpdateAttendenceSchema = InsertAttendenceSchema.partial()
-  .omit({ userId: true, entryTime: true })
-  .extend({
-    exitTime: z.coerce.date().optional().nullable(),
-  });
 
 
 export type Attendence = z.infer<typeof AttendenceSchema>;

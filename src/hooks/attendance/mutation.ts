@@ -1,4 +1,4 @@
-import { InsertAttendenceSchema,  UpdateAttendenceSchema,type Attendence } from "@/types/db";
+import { InsertAttendenceSchema, type Attendence } from "@/types/db";
 import type z from "zod";
 import { getMutationConfig } from "@/lib/query/strategy";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -18,34 +18,6 @@ export function useCreateAttendanceRecord() {
         },
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ["attendance"] });
-        },
-      }
-    )
-  );
-}
-
-export function useUpdateAttendanceRecord() {
-  const queryClient = useQueryClient();
-
-  return useMutation(
-    getMutationConfig<Attendence, {
-      id: string;
-      data: Partial<z.infer<typeof UpdateAttendenceSchema>>;
-    }>(
-      "optimistic",
-      {
-        mutationFn: async (
-          input: { id: string; data: Partial<z.infer<typeof UpdateAttendenceSchema>> }
-        ) => {
-          const validated = UpdateAttendenceSchema.parse(input.data);
-          const { data } = await apiClient.put<Attendence>(`/attendance/${input.id}`, validated);
-          return data;
-        },
-        onSuccess: () => {
-          queryClient.invalidateQueries({
-            queryKey: ["attendance"],
-          });
-
         },
       }
     )

@@ -11,18 +11,18 @@ interface AttendanceDetailsParams {
   enabled?: boolean;
 }
 
-export function useAttendanceDetails(params: AttendanceDetailsParams) {
-  return useQuery(
-    getQueryConfig<Attendence>("stable", {
-      queryKey: queryKeys.attendance.details(params.id).queryKey,
-      queryFn: async () => {
-        const { data } = await apiClient.get<Attendence>(`/attendance/${params.id}`);
-        return data;
-      },
-      enabled: !!params.id && params.enabled !== false,
-    })
-  );
-}
+// export function useAttendanceDetails(params: AttendanceDetailsParams) {
+//   return useQuery(
+//     getQueryConfig<Attendence>("stable", {
+//       queryKey: queryKeys.attendance.details(params.id).queryKey,
+//       queryFn: async () => {
+//         const { data } = await apiClient.get<Attendence>(`/attendance/${params.id}`);
+//         return data;
+//       },
+//       enabled: !!params.id && params.enabled !== false,
+//     })
+//   );
+// }
 
 export function useListAttendance(params: FPSClientInput) {
   return useQuery(
@@ -38,31 +38,18 @@ export function useListAttendance(params: FPSClientInput) {
   );
 }
 
-export const useMyListAttendance = (params: FPSClientInput) => {
-  return useQuery(
-    getQueryConfig<Attendence[]>("default", {
-      queryKey: queryKeys.attendance.list(params).queryKey,
-      queryFn: async () => {
-        const { data } = await apiClient.get<Attendence[]>("/attendance/my", {
-          params: params
-        });
-        return data;
-      }
-    })
-  );
-}
 
-export const useListAttendanceByEmployeeId = (employeeId: string, params: FPSClientInput) => {
+export const useListAttendanceByMacAddress = (macAddress: string, params: FPSClientInput) => {
   return useQuery(
     getQueryConfig<Attendence[]>("default", {
-      queryKey: queryKeys.attendance.list_by_employee(employeeId, params).queryKey,
+      queryKey: queryKeys.attendance.list_by_employee(macAddress, params).queryKey,
       queryFn: async () => {
-        const { data } = await apiClient.get<Attendence[]>(`/attendance/employee/${employeeId}`, {
+        const { data } = await apiClient.get<Attendence[]>(`/attendance/mac/${macAddress}`, {
           params: params
         });
         return data;
       },
-      enabled: !!employeeId,
+      enabled: !!macAddress,
     })
   );
 }

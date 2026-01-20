@@ -15,26 +15,26 @@ export const getColumns = (
 ): ColumnDef<Attendence>[] => {
   // Base columns without the select column
   const baseColumns: ColumnDef<Attendence>[] = [
+    // {
+    //   accessorKey: "row_id",
+    //   header: ({ column }) => (
+    //     <DataTableColumnHeader column={column} title="ID" />
+    //   ),
+    //   cell: ({ row }) => <CopyValueCell accessorKey="row_id" row={row} />,
+    //   size:140,
+    // },
     {
-      accessorKey: "id",
+      accessorKey: "id_value",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="ID" />
+        <DataTableColumnHeader column={column} title="Mac Address" />
       ),
-      cell: ({ row }) => <CopyValueCell accessorKey="id" row={row} />,
-      size:140,
-    },
-    {
-      accessorKey: "userId",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Employee ID" />
-      ),
-      cell: ({ row }) => <CopyValueCell accessorKey="userId" row={row} />,
+      cell: ({ row }) => <CopyValueCell accessorKey="id_value" row={row} />,
       size: 140,
       enableColumnFilter: false,
       enableSorting: false,
     },
     {
-      accessorKey: "userName",
+      accessorKey: "person_name",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Employee Name" />
       ),
@@ -56,40 +56,24 @@ export const getColumns = (
       size: 10,
     },
     {
-      accessorKey: "manual",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Manual" />
-      ),
-      cell: ({ row }) => {
-        const manual = row.getValue("manual") ? "Yes" : "No";
-
-        return <Badge
-          variant={manual === "Yes" ? "default" : "outline"}
-          className="max-w-full text-left truncate rounded-sm!">{manual}</Badge>;
-      },
-      enableColumnFilter: false,
-      enableSorting: false,
-      size:10,
-    },
-    {
-      accessorKey: "entryTime",
+      accessorKey: "entry_time",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Entry Time" />
       ),
       cell: ({ row }) => {
-        const date = formatDate(row.getValue("entryTime"), {}, true);
+        const date = formatDate(row.getValue("entry_time"), {}, true);
 
         return <div className="max-w-full text-left truncate">{date
           ? date : "-"}</div>;
       },
     },
     {
-      accessorKey: "exitTime",
+      accessorKey: "exit_time",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Exit Time" />
       ),
       cell: ({ row }) => {
-        const date = formatDate(row.getValue("exitTime"), {}, true);
+        const date = formatDate(row.getValue("exit_time"), {}, true);
 
         return <div className="max-w-full text-left truncate">{date ? date : "-"}</div>;
       },

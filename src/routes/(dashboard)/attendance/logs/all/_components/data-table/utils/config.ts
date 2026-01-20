@@ -10,13 +10,12 @@ export function useExportConfig() {
   // Column mapping for export
   const columnMapping = useMemo(
     () => ({
-      id: "ID",
-      userId: "User ID",
-      manual: "Manual Entry",
-      rssi: "RSSI",
+      row_id: "ID",
+      id_value: "Mac Address",
+      person_name: "Person Name",
       date: "Date",
-      entryTime: "Entry Time",
-      exitTime: "Exit Time",
+      entry_time: "Entry Time",
+      exit_time: "Exit Time",
     }),
     []
   );
@@ -25,9 +24,8 @@ export function useExportConfig() {
   const columnWidths = useMemo(
     () => [
       { wch: 35 }, // ID
-      { wch: 30 }, // User ID
-      { wch: 40 }, // Manual Entry
-      { wch: 20 }, // RSSI
+      { wch: 30 }, // Mac Address
+      { wch: 40 }, // Person Name
       { wch: 20 }, // Date
       { wch: 20 }, // Entry Time
       { wch: 20 }, // Exit Time
@@ -39,9 +37,8 @@ export function useExportConfig() {
   const headers = useMemo(
     () => [
       "ID",
-      "User ID",
-      "Manual Entry",
-      "RSSI",
+      "Mac Address",
+      "Person Name",
       "Date",
       "Entry Time",
       "Exit Time",
@@ -53,13 +50,12 @@ export function useExportConfig() {
   const transformFunction: DataTransformFunction<Attendence> = useMemo(
     () => (row: Attendence) => {
       return {
-        id: row.id,
-        userId: row.userId,
-        manual: row.manual,
-        rssi: row.rssi,
+        row_id: row.row_id,
+        id_value: row.id_value,
+        person_name: row.person_name,
         date: formatDate(row.date),
-        entryTime: formatDate(row.entryTime),
-        exitTime: row.exitTime ? formatDate(row.exitTime) : "",
+        entry_time: formatDate(row.entry_time, {}, true),
+        exit_time: formatDate(row.exit_time, {}, true),
       };
     },
     []
@@ -69,7 +65,7 @@ export function useExportConfig() {
     columnMapping,
     columnWidths,
     headers,
-    entityName: "Full Attendance Logs",
+    entityName: "Attendance Logs",
     transformFunction,
   };
 }

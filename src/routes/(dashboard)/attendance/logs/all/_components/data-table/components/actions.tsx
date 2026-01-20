@@ -34,7 +34,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const onConfirm = () => {
     mutate(
       {
-        id: data.id,
+        id: data.row_id,
       },
       {
         onSuccess: () => {
@@ -73,11 +73,11 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="center" sideOffset={5}>
-          <DropdownMenuItem
-            onSelect={() => handleNavigate(`/attendance/action/${data.id}`)}
+          {/* <DropdownMenuItem
+            onSelect={() => handleNavigate(`/attendance/action/${data.row_id}`)}
           >
             <IconEdit className="size-4 stroke-[1.5px]" /> Update
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
           <DropdownMenuItem onSelect={() => setOpen(true)}>
             <IconTrash className="size-4 stroke-[1.5px]" /> Delete
           </DropdownMenuItem>

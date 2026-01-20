@@ -14,7 +14,7 @@ export default function AttendanceTable() {
     <DataTable<Attendence, unknown>
       getColumns={getColumns}
       fetchDataFn={useListAttendanceData}
-      idField="id"
+      idField="row_id"
       exportConfig={useExportConfig()}
       pageSizeOptions={[10, 20, 30, 40, 50, 100, 150]}
       config={{
@@ -30,8 +30,6 @@ export default function AttendanceTable() {
         size: "sm",
         columnResizingTableId: "attendance-data-table",
         searchPlaceholder: "Search attendance",
-        defaultSortBy: "entryTime",
-        defaultSortOrder: "desc",
       }}
     />
   );

@@ -2,12 +2,8 @@ import FormContainer from "@/components/form/container";
 import { FormControllerWrapper } from "@/components/form/controller-wrapper";
 import Loader from "@/components/shared/loader";
 import { PhoneInput } from "@/components/ui/phone-input";
-import {
-  useCreateAttendanceRecord,
-  useUpdateAttendanceRecord,
-} from "@/hooks/attendance/mutation";
-import { useAttendanceDetails } from "@/hooks/attendance/query";
-import { InsertAttendenceSchema, UpdateAttendenceSchema } from "@/types/db";
+import { useCreateAttendanceRecord } from "@/hooks/attendance/mutation";
+import { InsertAttendenceSchema } from "@/types/db";
 import { createTypedFormIdGenerator } from "@/utils/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate, useParams, useSearch } from "@tanstack/react-router";
@@ -33,116 +29,61 @@ interface AttendanceFormProps {
 }
 
 const AttendanceForm = ({ id, editMode }: AttendanceFormProps) => {
-
-  const {employeeId} = useSearch({
-    strict: false
+  const { employeeMacAddress } = useSearch({
+    strict: false,
   });
   const navigate = useNavigate();
-  const { data: attendanceDetails, isLoading: isLoadingAttendance } =
-    useAttendanceDetails({ id ,
-      enabled: editMode && !!id
-    });
   const { mutate: createAttendance, isPending: isCreatingAttendance } =
     useCreateAttendanceRecord();
-  const { mutate: updateAttendance, isPending: isUpdatingAttendance } =
-    useUpdateAttendanceRecord();
 
   const BASE_FORM_ID = editMode
     ? `attendance-edit-form-${id}`
     : "attendance-creation-form";
-  const getFieldId = createTypedFormIdGenerator<
-    z.infer<typeof InsertAttendenceSchema> &
-      z.infer<typeof UpdateAttendenceSchema>
-  >(BASE_FORM_ID);
+  const getFieldId =
+    createTypedFormIdGenerator<z.infer<typeof InsertAttendenceSchema>>(
+      BASE_FORM_ID,
+    );
 
-  const schema = editMode ? UpdateAttendenceSchema : InsertAttendenceSchema;
+  const schema = InsertAttendenceSchema;
 
-  const form = useForm<
-    | z.infer<typeof InsertAttendenceSchema>
-    | z.infer<typeof UpdateAttendenceSchema>
-  >({
+  const form = useForm<z.infer<typeof InsertAttendenceSchema>>({
     resolver: zodResolver(schema as any),
     defaultValues: {
-      userId: "",
-      entryTime: new Date(),
-      exitTime: null,
+      id_value: "",
+      entry_time: new Date(),
+      exit_time: new Date(Date.now() + 3600000), // Default to 1 hour later
     },
   });
 
   useEffect(() => {
-    if (editMode && attendanceDetails) {
-      form.reset({
-        ...attendanceDetails,
-        entryTime: new Date(attendanceDetails.entryTime),
-        exitTime: attendanceDetails.exitTime
-          ? new Date(attendanceDetails.exitTime)
-          : null,
-      });
+    if (employeeMacAddress && !editMode) {
+      form.setValue("id_value", employeeMacAddress);
     }
-  }, [editMode, attendanceDetails, form]);
-
-
-
-  // useEffect(() => {
-  //   if (!editMode) {
-  //     form.reset();
-  //   }
-  // }, [editMode, form]);
-
-    useEffect(() => {
-    if (employeeId && !editMode) {
-      form.setValue("userId", employeeId);
-    }
-  }, [employeeId, editMode, form]);
+  }, [employeeMacAddress, editMode, form]);
 
   const handleReset = useRef(() => {
     form.reset();
   });
 
-  const handleSubmit = (
-    data:
-      | z.infer<typeof InsertAttendenceSchema>
-      | z.infer<typeof UpdateAttendenceSchema>
-  ) => {
-    if (editMode && id) {
-      updateAttendance(
-        { id, data: data as z.infer<typeof UpdateAttendenceSchema> },
-        {
-          onSuccess: () => {
-            form.reset(undefined, { keepValues: true });
-            toast.success("Attendance updated successfully");
-          },
-          onError: (error) => {
-            toast.error(
-              `Error updating attendance: ${error.message || "Update failed"}`
-            );
-          },
-        }
-      );
-    } else {
-      createAttendance(
-        { data: data as z.infer<typeof InsertAttendenceSchema> },
-        {
-          onSuccess: () => {
-            handleReset.current();
-            toast.success("Attendance record created successfully");
-            navigate({ to: `/attendance/logs/all` });
-          },
-          onError: (error) => {
-            toast.error(
-              `Error creating attendance record: ${
-                error.message || "Creation failed"
-              }`
-            );
-          },
-        }
-      );
-    }
+  const handleSubmit = (data: z.infer<typeof InsertAttendenceSchema>) => {
+    createAttendance(
+      { data: data as z.infer<typeof InsertAttendenceSchema> },
+      {
+        onSuccess: () => {
+          handleReset.current();
+          toast.success("Attendance record created successfully");
+          navigate({ to: `/attendance/logs/all` });
+        },
+        onError: (error) => {
+          toast.error(
+            `Error creating attendance record: ${
+              error.message || "Creation failed"
+            }`,
+          );
+        },
+      },
+    );
   };
-
-  if (isLoadingAttendance) {
-    return <Loader fullHeight />;
-  }
 
   const renderDateTimePicker = (field: any) => (
     <Popover>
@@ -151,7 +92,7 @@ const AttendanceForm = ({ id, editMode }: AttendanceFormProps) => {
           variant={"outline"}
           className={cn(
             "w-full pl-3 text-left font-normal justify-start",
-            !field.value && "text-muted-foreground"
+            !field.value && "text-muted-foreground",
           )}
         >
           {field.value ? (
@@ -190,7 +131,7 @@ const AttendanceForm = ({ id, editMode }: AttendanceFormProps) => {
                         let newDate = new Date(currentDate);
                         const hourValue = parseInt(hour.toString(), 10);
                         newDate.setHours(
-                          newDate.getHours() >= 12 ? hourValue + 12 : hourValue
+                          newDate.getHours() >= 12 ? hourValue + 12 : hourValue,
                         );
                         field.onChange(newDate);
                       }}
@@ -263,7 +204,6 @@ const AttendanceForm = ({ id, editMode }: AttendanceFormProps) => {
     </Popover>
   );
 
-
   return (
     <FormContainer
       editMode={editMode}
@@ -274,30 +214,31 @@ const AttendanceForm = ({ id, editMode }: AttendanceFormProps) => {
       onReset={() => handleReset.current()}
       onSubmit={form.handleSubmit(handleSubmit)}
       submitButton
-      submitButtonLoading={isCreatingAttendance || isUpdatingAttendance}
+      submitButtonLoading={isCreatingAttendance}
       submitButtonLoadingText={editMode ? "Updating" : "Adding"}
       submitButtonText={editMode ? "Update" : "Add"}
     >
       <FormControllerWrapper
         control={form.control}
-        fieldId={getFieldId("userId")}
-        name="userId"
-        placeholder="Employee ID"
-        label="Employee ID"
+        fieldId={getFieldId("id_value")}
+        name="id_value"
+        placeholder="Employee MAC Address"
+        label="Employee MAC Address"
         type="input"
+        inputType="text"
       />
 
       <FormControllerWrapper
         control={form.control}
-        fieldId={getFieldId("entryTime")}
-        name="entryTime"
+        fieldId={getFieldId("entry_time")}
+        name="entry_time"
         type="custom"
         render={renderDateTimePicker}
       />
       <FormControllerWrapper
         control={form.control}
-        fieldId={getFieldId("exitTime")}
-        name="exitTime"
+        fieldId={getFieldId("exit_time")}
+        name="exit_time"
         type="custom"
         render={renderDateTimePicker}
       />

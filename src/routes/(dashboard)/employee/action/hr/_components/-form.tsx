@@ -1,8 +1,7 @@
 import FormContainer from "@/components/form/container";
 import { FormControllerWrapper } from "@/components/form/controller-wrapper";
 import Loader from "@/components/shared/loader";
-import { PhoneInput } from "@/components/ui/phone-input";
-import { useCreateEmployee, useCreateEmployeeHR, useUpdateEmployee } from "@/hooks/employee/mutation";
+import { useCreateEmployeeHR, useUpdateEmployee } from "@/hooks/employee/mutation";
 import { useEmployeeDetails } from "@/hooks/employee/query";
 import { InsertUserSchema, UpdateUserSchema } from "@/types/db";
 import { createTypedFormIdGenerator } from "@/utils/form";
@@ -50,7 +49,6 @@ const EmployeeForm = ({ id, editMode }: EmployeeFormProps) => {
     defaultValues: {
       name: "",
       email: "",
-      phoneNumber: "",
       password: "",
       macAddress: "",
     },
@@ -61,7 +59,6 @@ const EmployeeForm = ({ id, editMode }: EmployeeFormProps) => {
       form.reset({
         name: employeeDetails.name,
         email: employeeDetails.email,
-        phoneNumber: employeeDetails.phoneNumber,
         macAddress: employeeDetails.macAddress,
       });
     }
@@ -137,24 +134,6 @@ const EmployeeForm = ({ id, editMode }: EmployeeFormProps) => {
         placeholder="john.doe@example.com"
         type="input"
       />
-
-      <FormControllerWrapper
-        control={form.control}
-        fieldId={getFieldId("phoneNumber")}
-        name="phoneNumber"
-        label="Phone Number"
-        type="custom"
-        render={({ value, onChange, onBlur }) => (
-          <PhoneInput
-            value={value as string}
-            onChange={onChange}
-            onBlur={onBlur}
-            fixedCountry="IN"
-            placeholder="Phone Number"
-          />
-        )}
-      />
-
       <FormControllerWrapper
         control={form.control}
         fieldId={getFieldId("password")}

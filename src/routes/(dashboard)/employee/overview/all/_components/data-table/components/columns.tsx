@@ -7,7 +7,7 @@ import type { User } from "@/types/db";
 import { formatDate } from "@/utils/format";
 import type { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./actions";
-import { UserStatusBadge } from "@/components/data-table/badge/user-status-badge";
+
 
 export const getColumns = (
   handleRowDeselection: ((rowId: string) => void) | null | undefined
@@ -32,14 +32,6 @@ export const getColumns = (
       enableSorting: false,
     },
     {
-      accessorKey: "phoneNumber",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Mobile" />
-      ),
-      enableColumnFilter: false,
-      enableSorting: false,
-    },
-    {
       accessorKey: "macAddress",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="MAC Address" />
@@ -47,22 +39,6 @@ export const getColumns = (
       cell: ({ row }) => <CopyValueCell accessorKey="macAddress" row={row} />,
       enableColumnFilter: false,
       enableSorting: false,
-    },
-      {
-      accessorKey: "status",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Status" />
-      ),
-      cell: ({ row }) => (
-        <div className="flex items-center gap-2">
-          <UserStatusBadge showLabel status={row.getValue("status")} />
-        </div>
-      ),
-      meta: {
-        label: "Status",
-      },
-      enableSorting: false,
-      enableHiding: false,
     },
     {
       accessorKey: "createdAt",
