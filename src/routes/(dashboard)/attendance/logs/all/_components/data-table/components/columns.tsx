@@ -7,8 +7,6 @@ import type { Attendence } from "@/types/db";
 import { formatDate } from "@/utils/format";
 import type { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./actions";
-import { UserStatusBadge } from "@/components/data-table/badge/user-status-badge";
-import { Badge } from "@/components/ui/badge";
 
 export const getColumns = (
   handleRowDeselection: ((rowId: string) => void) | null | undefined

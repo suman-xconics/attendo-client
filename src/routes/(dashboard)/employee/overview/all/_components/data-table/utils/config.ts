@@ -56,7 +56,6 @@ export function useExportConfig() {
         id: row.id,
         name: row.name,
         email: row.email,
-        phoneNumber: row.phoneNumber,
         macAddress: row.macAddress,
         createdAt: formatDate(row.createdAt, {}, true),
         updatedAt: formatDate(row.updatedAt, {}, true),
