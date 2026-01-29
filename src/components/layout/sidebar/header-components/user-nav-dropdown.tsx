@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -11,26 +12,31 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
-import { IconLogout, IconUser } from "@tabler/icons-react";
+import { IconLogout } from "@tabler/icons-react";
 import { Suspense } from "react";
 import { toast } from "sonner";
 import { useAuth } from "@/provider/auth";
-import { useNavigate } from "@tanstack/react-router";
 import { authClient } from "@/lib/auth";
 import { UserAvatar } from "@/components/shared/avatar";
 
 function UserNavDropdownContent() {
   const { user } = useAuth();
-  const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
       await authClient.signOut();
+
+      // 🔥 MANUALLY CLEAR BEARER TOKEN
+      localStorage.removeItem("bearer_token");
+
       toast.success("Successfully logged out.");
+      // Optionally redirect:
+      // router.push("/auth/login");
     } catch (error) {
       toast.error("Logout failed. Please try again.");
     }
   };
+
 
   if (!user) {
     return <Skeleton className="h-10 w-10 rounded-full" />;
